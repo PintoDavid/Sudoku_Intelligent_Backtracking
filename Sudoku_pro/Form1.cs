@@ -276,7 +276,10 @@ namespace Sudoku_pro
             int nextRow = (col == gridSize - 1) ? row + 1 : row;
             int nextCol = (col == gridSize - 1) ? 0 : col + 1;
 
-            foreach (int number in numerosDisponibles.ToList())
+            // Mezclar aleatoriamente los números disponibles
+            numerosDisponibles = numerosDisponibles.OrderBy(a => Guid.NewGuid()).ToList();
+
+            foreach (int number in numerosDisponibles)
             {
                 if (EsValido(row, col, number))
                 {
@@ -301,7 +304,9 @@ namespace Sudoku_pro
                 for (int columna = 0; columna < gridSize; columna++)
                 {
                     bool numColocado = false;
-                    for (int numero = 1; numero <= gridSize; numero++)
+                    List<int> numerosDisponibles = Enumerable.Range(1, gridSize).ToList();
+                    numerosDisponibles = numerosDisponibles.OrderBy(a => Guid.NewGuid()).ToList(); // Mezclar números aleatoriamente
+                    foreach (int numero in numerosDisponibles)
                     {
                         if (EsNumeroValidoSubmatriz(fila, columna, numero))
                         {
@@ -357,7 +362,9 @@ namespace Sudoku_pro
             if (columna == gridSize) return LlenarTableroSubmatriz(fila + 1, 0);
 
             List<int> numeros = Enumerable.Range(1, gridSize).ToList();
-            numeros = numeros.OrderBy(a => Guid.NewGuid()).ToList(); // Mezclar números aleatoriamente
+
+            // Mezclar aleatoriamente los números disponibles
+            numeros = numeros.OrderBy(a => Guid.NewGuid()).ToList();
 
             foreach (int num in numeros)
             {
