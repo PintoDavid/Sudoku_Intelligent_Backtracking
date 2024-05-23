@@ -104,6 +104,7 @@ namespace Sudoku_pro
             this.BtnSolucionSudoku.TabIndex = 7;
             this.BtnSolucionSudoku.Text = "Solución con IA";
             this.BtnSolucionSudoku.UseVisualStyleBackColor = false;
+            this.BtnSolucionSudoku.Click += new System.EventHandler(this.BtnSolucionSudoku_Click_1);
             // 
             // button4
             // 
