@@ -193,11 +193,12 @@ namespace Sudoku_pro
                 BtnMovimientosSudoku.Enabled = true;
                 BtnMovimientosSudoku.BackColor = Color.White;
 
+                LbEstadoPrograma.Text = "Por favor, espere. Buscando solución.";
+
                 if (await solver.ResolverSudoku())
                 {
                     stopwatch.Start();
 
-                    LbEstadoPrograma.Text = "Por favor, espere. Buscando solución.";
                     tablero = solver.ObtenerSolucion();
 
                     stopwatch.Stop();
@@ -214,11 +215,13 @@ namespace Sudoku_pro
                 else
                 {
                     MessageBox.Show("No se puede resolver el Sudoku.", "Error - Sudoku no resuelto", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    LbEstadoPrograma.Text = "El Sudoku no se pudo resolver";
                 }
             }
             else
             {
                 MessageBox.Show("El Sudoku ya está resuelto.", "Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LbEstadoPrograma.Text = "El Sudoku está resuelto.";
             }
         }
 
@@ -251,11 +254,13 @@ namespace Sudoku_pro
 
                 labelMovimientos.Visible = false;
                 textBoxMovimientos.Visible = false;
+                movimientosVisibles = false;
 
-                if(this.Width != 689)
+                if (this.Width != 689)
                 {
                     this.Width -= aumentoAncho;
                 }
+                this.Width = 689;
                 CenterToScreen();
             }
         }
@@ -528,13 +533,13 @@ namespace Sudoku_pro
             switch (dificultad)
             {
                 case "Medio":
-                    porcentajeEliminar = 0.50 * pesoVariable; // 0.50 * 1 = 0.50 * 16 = 8
+                    porcentajeEliminar = 0.25; // 0.50 * 1 = 0.50 * 16 = 8
                     break;
                 case "Difícil":
-                    porcentajeEliminar = 0.25 * pesoVariable; // 0.25 * 3 = 0.75 * 16 = 12
+                    porcentajeEliminar = 0.50; // 0.25 * 3 = 0.75 * 16 = 12
                     break;
                 default:
-                    porcentajeEliminar = 0.25 * pesoVariable; // 0.25 * 1 = 0.25 * 16 =  4 
+                    porcentajeEliminar = 0.10; // 0.25 * 1 = 0.25 * 16 =  4 
                     break;
             }
 
@@ -616,7 +621,7 @@ namespace Sudoku_pro
                 {
                     tablero[row, col] = num;
                     NotificarMovimiento($"Se colocó {num} en la celda ({row},{col})");
-                    // tableroPanel.Invalidate();
+                    tableroPanel.Invalidate();
                     await Task.Delay(50);
                     /*if (num % 10 == 0)
                     {
