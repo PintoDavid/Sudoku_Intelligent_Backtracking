@@ -50,50 +50,56 @@ namespace Sudoku_pro
             this.textBoxMovimientos = new System.Windows.Forms.TextBox();
             this.labelMovimientos = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.LbEstadoPrograma = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Rinfo2
             // 
             this.Rinfo2.AutoSize = true;
-            this.Rinfo2.Location = new System.Drawing.Point(271, 66);
+            this.Rinfo2.Location = new System.Drawing.Point(206, 40);
+            this.Rinfo2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Rinfo2.Name = "Rinfo2";
-            this.Rinfo2.Size = new System.Drawing.Size(13, 17);
+            this.Rinfo2.Size = new System.Drawing.Size(10, 13);
             this.Rinfo2.TabIndex = 1;
             this.Rinfo2.Text = "-";
             // 
             // Rinfo3
             // 
             this.Rinfo3.AutoSize = true;
-            this.Rinfo3.Location = new System.Drawing.Point(455, 66);
+            this.Rinfo3.Location = new System.Drawing.Point(341, 40);
+            this.Rinfo3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Rinfo3.Name = "Rinfo3";
-            this.Rinfo3.Size = new System.Drawing.Size(13, 17);
+            this.Rinfo3.Size = new System.Drawing.Size(10, 13);
             this.Rinfo3.TabIndex = 2;
             this.Rinfo3.Text = "-";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(613, 164);
+            this.label4.Location = new System.Drawing.Point(456, 53);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(108, 17);
+            this.label4.Size = new System.Drawing.Size(83, 13);
             this.label4.TabIndex = 3;
             this.label4.Text = "Tipo de Sudoku";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(587, 199);
+            this.label5.Location = new System.Drawing.Point(436, 82);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(135, 17);
+            this.label5.Size = new System.Drawing.Size(103, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Tamaño del Sudoku";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(579, 234);
+            this.label6.Location = new System.Drawing.Point(430, 110);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(141, 17);
+            this.label6.Size = new System.Drawing.Size(108, 13);
             this.label6.TabIndex = 5;
             this.label6.Text = "Dificultad del Sudoku";
             // 
@@ -103,10 +109,10 @@ namespace Sudoku_pro
             this.BtnSolucionSudoku.Enabled = false;
             this.BtnSolucionSudoku.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnSolucionSudoku.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSolucionSudoku.Location = new System.Drawing.Point(645, 352);
-            this.BtnSolucionSudoku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnSolucionSudoku.Location = new System.Drawing.Point(480, 206);
+            this.BtnSolucionSudoku.Margin = new System.Windows.Forms.Padding(2);
             this.BtnSolucionSudoku.Name = "BtnSolucionSudoku";
-            this.BtnSolucionSudoku.Size = new System.Drawing.Size(183, 46);
+            this.BtnSolucionSudoku.Size = new System.Drawing.Size(137, 37);
             this.BtnSolucionSudoku.TabIndex = 7;
             this.BtnSolucionSudoku.Text = "Solución con IA";
             this.BtnSolucionSudoku.UseVisualStyleBackColor = false;
@@ -118,12 +124,12 @@ namespace Sudoku_pro
             this.BtnMovimientosSudoku.Enabled = false;
             this.BtnMovimientosSudoku.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnMovimientosSudoku.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnMovimientosSudoku.Location = new System.Drawing.Point(645, 558);
-            this.BtnMovimientosSudoku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnMovimientosSudoku.Location = new System.Drawing.Point(480, 311);
+            this.BtnMovimientosSudoku.Margin = new System.Windows.Forms.Padding(2);
             this.BtnMovimientosSudoku.Name = "BtnMovimientosSudoku";
-            this.BtnMovimientosSudoku.Size = new System.Drawing.Size(183, 55);
+            this.BtnMovimientosSudoku.Size = new System.Drawing.Size(137, 45);
             this.BtnMovimientosSudoku.TabIndex = 10;
-            this.BtnMovimientosSudoku.Text = "Movimientos hechos";
+            this.BtnMovimientosSudoku.Text = "Pasos de la inteligencia";
             this.BtnMovimientosSudoku.UseVisualStyleBackColor = false;
             this.BtnMovimientosSudoku.Click += new System.EventHandler(this.BtnMovimientosSudoku_Click);
             // 
@@ -134,10 +140,10 @@ namespace Sudoku_pro
             "Ninguno",
             "Clásico",
             "Submatriz"});
-            this.Tiposudoku.Location = new System.Drawing.Point(725, 164);
-            this.Tiposudoku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Tiposudoku.Location = new System.Drawing.Point(540, 53);
+            this.Tiposudoku.Margin = new System.Windows.Forms.Padding(2);
             this.Tiposudoku.Name = "Tiposudoku";
-            this.Tiposudoku.Size = new System.Drawing.Size(121, 24);
+            this.Tiposudoku.Size = new System.Drawing.Size(92, 21);
             this.Tiposudoku.TabIndex = 11;
             this.Tiposudoku.SelectedIndexChanged += new System.EventHandler(this.Tiposudoku_SelectedIndexChanged);
             // 
@@ -150,10 +156,10 @@ namespace Sudoku_pro
             "2",
             "3",
             "4"});
-            this.Tamaño.Location = new System.Drawing.Point(725, 199);
-            this.Tamaño.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Tamaño.Location = new System.Drawing.Point(540, 82);
+            this.Tamaño.Margin = new System.Windows.Forms.Padding(2);
             this.Tamaño.Name = "Tamaño";
-            this.Tamaño.Size = new System.Drawing.Size(121, 24);
+            this.Tamaño.Size = new System.Drawing.Size(92, 21);
             this.Tamaño.TabIndex = 12;
             this.Tamaño.SelectedIndexChanged += new System.EventHandler(this.Tamaño_SelectedIndexChanged);
             // 
@@ -165,28 +171,29 @@ namespace Sudoku_pro
             this.Cantidad_celdas_vacias.Items.AddRange(new object[] {
             "Fácil",
             "Medio",
-            "Dificíl"});
-            this.Cantidad_celdas_vacias.Location = new System.Drawing.Point(725, 234);
-            this.Cantidad_celdas_vacias.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            "Difícil"});
+            this.Cantidad_celdas_vacias.Location = new System.Drawing.Point(540, 110);
+            this.Cantidad_celdas_vacias.Margin = new System.Windows.Forms.Padding(2);
             this.Cantidad_celdas_vacias.Name = "Cantidad_celdas_vacias";
-            this.Cantidad_celdas_vacias.Size = new System.Drawing.Size(121, 24);
+            this.Cantidad_celdas_vacias.Size = new System.Drawing.Size(92, 21);
             this.Cantidad_celdas_vacias.TabIndex = 13;
             // 
             // Tablero
             // 
-            this.Tablero.Location = new System.Drawing.Point(29, 100);
-            this.Tablero.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Tablero.Location = new System.Drawing.Point(22, 81);
+            this.Tablero.Margin = new System.Windows.Forms.Padding(2);
             this.Tablero.Name = "Tablero";
-            this.Tablero.Size = new System.Drawing.Size(523, 523);
+            this.Tablero.Size = new System.Drawing.Size(392, 425);
             this.Tablero.TabIndex = 14;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(612, 490);
+            this.label8.Location = new System.Drawing.Point(455, 381);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(254, 25);
+            this.label8.Size = new System.Drawing.Size(203, 20);
             this.label8.TabIndex = 15;
             this.label8.Text = "Tiempo en hallar la solución";
             // 
@@ -194,9 +201,10 @@ namespace Sudoku_pro
             // 
             this.LbTiempoTranscurrido.AutoSize = true;
             this.LbTiempoTranscurrido.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LbTiempoTranscurrido.Location = new System.Drawing.Point(699, 519);
+            this.LbTiempoTranscurrido.Location = new System.Drawing.Point(521, 401);
+            this.LbTiempoTranscurrido.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.LbTiempoTranscurrido.Name = "LbTiempoTranscurrido";
-            this.LbTiempoTranscurrido.Size = new System.Drawing.Size(81, 25);
+            this.LbTiempoTranscurrido.Size = new System.Drawing.Size(65, 20);
             this.LbTiempoTranscurrido.TabIndex = 16;
             this.LbTiempoTranscurrido.Text = "0.00 ms";
             // 
@@ -206,10 +214,10 @@ namespace Sudoku_pro
             this.BtnReiniciarSudoku.Enabled = false;
             this.BtnReiniciarSudoku.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnReiniciarSudoku.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold);
-            this.BtnReiniciarSudoku.Location = new System.Drawing.Point(645, 418);
-            this.BtnReiniciarSudoku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnReiniciarSudoku.Location = new System.Drawing.Point(480, 260);
+            this.BtnReiniciarSudoku.Margin = new System.Windows.Forms.Padding(2);
             this.BtnReiniciarSudoku.Name = "BtnReiniciarSudoku";
-            this.BtnReiniciarSudoku.Size = new System.Drawing.Size(183, 46);
+            this.BtnReiniciarSudoku.Size = new System.Drawing.Size(137, 37);
             this.BtnReiniciarSudoku.TabIndex = 17;
             this.BtnReiniciarSudoku.Text = "Reiniciar Sudoku";
             this.BtnReiniciarSudoku.UseVisualStyleBackColor = false;
@@ -220,9 +228,10 @@ namespace Sudoku_pro
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label10.ForeColor = System.Drawing.Color.DarkCyan;
-            this.label10.Location = new System.Drawing.Point(669, 100);
+            this.label10.Location = new System.Drawing.Point(496, 19);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(143, 23);
+            this.label10.Size = new System.Drawing.Size(112, 18);
             this.label10.TabIndex = 18;
             this.label10.Text = "Configuración";
             // 
@@ -230,18 +239,20 @@ namespace Sudoku_pro
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(199, 21);
+            this.label11.Location = new System.Drawing.Point(137, 9);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(196, 25);
+            this.label11.Size = new System.Drawing.Size(160, 20);
             this.label11.TabIndex = 19;
             this.label11.Text = "Tablero de Sudoku";
             // 
             // Rinfo
             // 
             this.Rinfo.AutoSize = true;
-            this.Rinfo.Location = new System.Drawing.Point(105, 66);
+            this.Rinfo.Location = new System.Drawing.Point(78, 40);
+            this.Rinfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.Rinfo.Name = "Rinfo";
-            this.Rinfo.Size = new System.Drawing.Size(13, 17);
+            this.Rinfo.Size = new System.Drawing.Size(10, 13);
             this.Rinfo.TabIndex = 21;
             this.Rinfo.Text = "-";
             // 
@@ -251,22 +262,22 @@ namespace Sudoku_pro
             this.BtnGenerarSudoku.Enabled = false;
             this.BtnGenerarSudoku.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnGenerarSudoku.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnGenerarSudoku.Location = new System.Drawing.Point(645, 289);
-            this.BtnGenerarSudoku.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.BtnGenerarSudoku.Location = new System.Drawing.Point(480, 155);
+            this.BtnGenerarSudoku.Margin = new System.Windows.Forms.Padding(2);
             this.BtnGenerarSudoku.Name = "BtnGenerarSudoku";
-            this.BtnGenerarSudoku.Size = new System.Drawing.Size(183, 46);
+            this.BtnGenerarSudoku.Size = new System.Drawing.Size(137, 37);
             this.BtnGenerarSudoku.TabIndex = 22;
             this.BtnGenerarSudoku.Text = "Generar Sudoku";
             this.BtnGenerarSudoku.UseVisualStyleBackColor = false;
             // 
             // textBoxMovimientos
             // 
-            this.textBoxMovimientos.Location = new System.Drawing.Point(915, 63);
-            this.textBoxMovimientos.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxMovimientos.Location = new System.Drawing.Point(686, 51);
+            this.textBoxMovimientos.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxMovimientos.Multiline = true;
             this.textBoxMovimientos.Name = "textBoxMovimientos";
             this.textBoxMovimientos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxMovimientos.Size = new System.Drawing.Size(443, 496);
+            this.textBoxMovimientos.Size = new System.Drawing.Size(333, 404);
             this.textBoxMovimientos.TabIndex = 23;
             this.textBoxMovimientos.Visible = false;
             // 
@@ -275,9 +286,10 @@ namespace Sudoku_pro
             this.labelMovimientos.AutoSize = true;
             this.labelMovimientos.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelMovimientos.ForeColor = System.Drawing.Color.DarkCyan;
-            this.labelMovimientos.Location = new System.Drawing.Point(1005, 23);
+            this.labelMovimientos.Location = new System.Drawing.Point(754, 19);
+            this.labelMovimientos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelMovimientos.Name = "labelMovimientos";
-            this.labelMovimientos.Size = new System.Drawing.Size(242, 23);
+            this.labelMovimientos.Size = new System.Drawing.Size(189, 18);
             this.labelMovimientos.TabIndex = 24;
             this.labelMovimientos.Text = "Movimientos Realizados";
             this.labelMovimientos.Visible = false;
@@ -286,18 +298,31 @@ namespace Sudoku_pro
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(984, 564);
+            this.label1.Location = new System.Drawing.Point(738, 458);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(290, 50);
+            this.label1.Size = new System.Drawing.Size(234, 40);
             this.label1.TabIndex = 25;
             this.label1.Text = "Se demora un poco más\r\npor la impresión de movimientos";
             // 
+            // LbEstadoPrograma
+            // 
+            this.LbEstadoPrograma.AutoSize = true;
+            this.LbEstadoPrograma.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LbEstadoPrograma.Location = new System.Drawing.Point(88, 63);
+            this.LbEstadoPrograma.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.LbEstadoPrograma.Name = "LbEstadoPrograma";
+            this.LbEstadoPrograma.Size = new System.Drawing.Size(263, 16);
+            this.LbEstadoPrograma.TabIndex = 26;
+            this.LbEstadoPrograma.Text = "Sudoku no generado. Configura su Sudoku";
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(897, 646);
+            this.ClientSize = new System.Drawing.Size(673, 525);
+            this.Controls.Add(this.LbEstadoPrograma);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelMovimientos);
             this.Controls.Add(this.textBoxMovimientos);
@@ -319,7 +344,7 @@ namespace Sudoku_pro
             this.Controls.Add(this.label4);
             this.Controls.Add(this.Rinfo3);
             this.Controls.Add(this.Rinfo2);
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -351,6 +376,7 @@ namespace Sudoku_pro
         private System.Windows.Forms.TextBox textBoxMovimientos;
         private System.Windows.Forms.Label labelMovimientos;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label LbEstadoPrograma;
     }
 }
 
