@@ -182,10 +182,9 @@ namespace Sudoku_pro
             MessageBox.Show("El Sudoku ha sido generado correctamente. Ya puedes probar la inteligencia para resolverlo.", "Sudoku generado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private async void BtnSolucionSudoku_Click_1(object sender, EventArgs e)
+        private void BtnSolucionSudoku_Click_1(object sender, EventArgs e)
         {
-            solver = new SudokuSolver(tablero, gridSize, subMatrixSize, Tablero);
-            solver.MovimientoRealizado += Solver_MovimientoRealizado;
+            solver = new SudokuSolver(tablero);
             stopwatch = new Stopwatch();
 
             if (sudokuAnswered == false)
@@ -195,7 +194,7 @@ namespace Sudoku_pro
 
                 LbEstadoPrograma.Text = "Por favor, espere. Buscando solución.";
 
-                if (await solver.ResolverSudoku())
+                if (solver.ResolverSudoku())
                 {
                     stopwatch.Start();
 
@@ -533,13 +532,13 @@ namespace Sudoku_pro
             switch (dificultad)
             {
                 case "Medio":
-                    porcentajeEliminar = 0.25; // 0.50 * 1 = 0.50 * 16 = 8
+                    porcentajeEliminar = 0.50 * pesoVariable; // 0.50 * 1 = 0.50 * 16 = 8
                     break;
                 case "Difícil":
-                    porcentajeEliminar = 0.50; // 0.25 * 3 = 0.75 * 16 = 12
+                    porcentajeEliminar = 0.25 * pesoVariable; // 0.25 * 3 = 0.75 * 16 = 12
                     break;
                 default:
-                    porcentajeEliminar = 0.10; // 0.25 * 1 = 0.25 * 16 =  4 
+                    porcentajeEliminar = 0.25 * pesoVariable; // 0.25 * 1 = 0.25 * 16 =  4 
                     break;
             }
 
@@ -547,19 +546,6 @@ namespace Sudoku_pro
 
             for (int i = 0; i < celdasEliminar; i++)
             {
-                /*
-                 do
-                {
-                    fila    = rand.Next(gridSize);
-                    columna = rand.Next(gridSize);
-
-                    if (tablero[fila, columna] > 0)
-                    {
-                        tablero[fila, columna] = 0;
-                    }
-
-                } while (tablero[fila, columna] == 0);
-                 */
                 do
                 {
                     fila    = (int)rand.Next ( gridSize );
@@ -574,95 +560,77 @@ namespace Sudoku_pro
         }
     }
 
-        /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-        SOLUCIONADOR DE SUDOKU CON BACKTRACKING INTELIGENTE
-        77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777*/
+    /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
+    SOLUCIONADOR DE SUDOKU CON BACKTRACKING INTELIGENTE
+    77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777*/
     public class SudokuSolver
     {
         private int[,] tablero;
-        private int gridSize;
-        private int subMatrixSize;
-        private int startRow;
-        private int startCol;
-        private Panel tableroPanel;
 
-        public event EventHandler<string> MovimientoRealizado;
-
-        private void NotificarMovimiento(string mensaje)
-        {
-            MovimientoRealizado?.Invoke(this, mensaje);
-        }
-
-        public SudokuSolver(int[,] tablero, int gridSize, int subMatrixSize, Panel tableroPanel)
+        public SudokuSolver(int[,] tablero)
         {
             this.tablero = tablero;
-            this.gridSize = gridSize;
-            this.subMatrixSize = subMatrixSize;
-            this.tableroPanel = tableroPanel;
         }
 
-        public async Task<bool> ResolverSudoku()
+        public bool ResolverSudoku()
         {
-            return await Resolver(0, 0);
+            return Resolver(0, 0);
         }
 
-        private async Task<bool> Resolver(int row, int col)
+        private bool Resolver(int row, int col)
         {
+            int gridSize = tablero.GetLength(0);
+
             if (row == gridSize)
                 return true;
-            if (col == gridSize)
-                return await Resolver(row + 1, 0);
-            if (tablero[row, col] != 0)
-                return await Resolver(row, col + 1);
 
+            int nextRow = (col == gridSize - 1) ? row + 1 : row;
+            int nextCol = (col == gridSize - 1) ? 0 : col + 1;
+
+            if (tablero[row, col] != 0)
+                return Resolver(nextRow, nextCol);
+
+            List<int> numerosPosibles = new List<int>();
             for (int num = 1; num <= gridSize; num++)
             {
                 if (EsValido(row, col, num))
-                {
-                    tablero[row, col] = num;
-                    NotificarMovimiento($"Se colocó {num} en la celda ({row},{col})");
-                    tableroPanel.Invalidate();
-                    await Task.Delay(50);
-                    /*if (num % 10 == 0)
-                    {
-                        await Task.Delay(50);
-                    }*/
-                    if (await Resolver(row, col + 1))
-                        return true;
-                    tablero[row, col] = 0;
-                }
+                    numerosPosibles.Add(num);
             }
-            //await Task.Delay(50);
+
+            foreach (int num in numerosPosibles)
+            {
+                tablero[row, col] = num;
+                if (Resolver(nextRow, nextCol))
+                    return true;
+                tablero[row, col] = 0;
+            }
 
             return false;
         }
 
         private bool EsValido(int row, int col, int num)
         {
-            for (int x = 0; x < gridSize; x++)
+            int gridSize = tablero.GetLength(0);
+
+            // Verificar fila y columna
+            for (int i = 0; i < gridSize; i++)
             {
-                if (tablero[row, x] == num || tablero[x, col] == num)
-                {
-                    NotificarMovimiento($"El número {num} no es válido en la fila o columna ({row},{col})");
+                if (tablero[row, i] == num || tablero[i, col] == num)
                     return false;
-                }
             }
 
-            startRow = row - row % subMatrixSize;
-            startCol = col - col % subMatrixSize;
-            for (int i = 0; i < subMatrixSize; i++)
+            // Verificar subgrilla
+            int subMatrixSize = (int)Math.Sqrt(gridSize);
+            int startRow = row - row % subMatrixSize;
+            int startCol = col - col % subMatrixSize;
+            for (int i = startRow; i < startRow + subMatrixSize; i++)
             {
-                for (int j = 0; j < subMatrixSize; j++)
+                for (int j = startCol; j < startCol + subMatrixSize; j++)
                 {
-                    if (tablero[i + startRow, j + startCol] == num)
-                    {
-                        NotificarMovimiento($"El número {num} no es válido en la submatriz ({row},{col})");
+                    if (tablero[i, j] == num)
                         return false;
-                    }
                 }
             }
-
-            NotificarMovimiento($"El número {num} es válido en la celda ({row},{col})");
             return true;
         }
 
