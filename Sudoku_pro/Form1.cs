@@ -31,9 +31,8 @@ namespace Sudoku_pro
         int fila, columna;
         private double porcentajeEliminar;
         private int celdasEliminar;
-        private bool sudokuGenerado;
-        public bool sudokuAnswered;
-        private TimeSpan tiempoTranscurrido;
+        private bool sudokuGenerado = false;
+        public bool sudokuAnswered = false;
         private bool movimientosVisibles = false;
         private const int aumentoAncho = 357;
 
@@ -163,9 +162,10 @@ namespace Sudoku_pro
         private void BtnGenerarSudoku_Click(object sender, EventArgs e)
         {
             GenerarSudoku();
-            DibujarTablero();
+            Tablero.Invalidate();
             sudokuGenerado = true;
-            
+            sudokuAnswered = false;
+
             Tiposudoku.Enabled = false;
             Tamaño.Enabled = false;
             Cantidad_celdas_vacias.Enabled = false;
@@ -185,23 +185,22 @@ namespace Sudoku_pro
             solver = new SudokuSolverSubmatriz(tablero, gridSize, subMatrixSize);
             solver.MovimientoRealizado += Solver_MovimientoRealizado;
             stopwatch = new Stopwatch();
-            if (sudokuAnswered != true)
+            if (sudokuAnswered == false)
             {
-                stopwatch.Start();
-
                 if (solver.ResolverSudoku())
                 {
-                    tablero = solver.ObtenerSolucion();
-                    DibujarTablero();
+                    stopwatch.Start();
+
                     BtnMovimientosSudoku.Enabled = true;
                     BtnMovimientosSudoku.BackColor = Color.White;
 
-                    // Detener el temporizador
+                    tablero = solver.ObtenerSolucion();
+
                     stopwatch.Stop();
 
-                    // Obtener el tiempo transcurrido
-                    tiempoTranscurrido = stopwatch.Elapsed;
-                    LbTiempoTranscurrido.Text = $"{tiempoTranscurrido.TotalMilliseconds} ms";
+                    Tablero.Invalidate();
+
+                    LbTiempoTranscurrido.Text = $"{stopwatch.Elapsed.TotalMilliseconds} ms";
 
                     MessageBox.Show("El Sudoku ha sido resuelto.","Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     sudokuAnswered = true;
@@ -229,21 +228,29 @@ namespace Sudoku_pro
             // Evaluar el resultado del MessageBox
             if (result == DialogResult.Yes && sudokuGenerado == true)
             {
-                // Código para limpiar el tablero de Sudoku
-                LimpiarTablero();
                 sudokuGenerado = false;
+                sudokuAnswered = false;
+
+                LimpiarTablero();
+
                 Tiposudoku.Enabled = true;
+
                 BtnReiniciarSudoku.Enabled = false;
                 BtnReiniciarSudoku.BackColor = Color.LightGray;
                 BtnMovimientosSudoku.Enabled = false;
                 BtnMovimientosSudoku.BackColor = Color.LightGray;
                 BtnSolucionSudoku.Enabled = false;
                 BtnSolucionSudoku.BackColor = Color.LightGray;
+
                 LbTiempoTranscurrido.Text = "0.00 ms";
-                // Ocultar los controles de movimientos y ajustar el tamaño del formulario
+
                 labelMovimientos.Visible = false;
                 textBoxMovimientos.Visible = false;
-                this.Width -= aumentoAncho; // Reducir el ancho del formulario
+
+                if(this.Width != 689)
+                {
+                    this.Width -= aumentoAncho;
+                }
                 CenterToScreen();
             }
         }
@@ -270,7 +277,6 @@ namespace Sudoku_pro
 
         private void Solver_MovimientoRealizado(object sender, string e)
         {
-            // Mostrar el movimiento en el TextBox
             textBoxMovimientos.AppendText(e + Environment.NewLine);
         }
 
@@ -301,11 +307,6 @@ namespace Sudoku_pro
             }
 
             // Redibujar el tablero después de generar el Sudoku
-            Tablero.Invalidate();
-        }
-
-        private void DibujarTablero()
-        {
             Tablero.Invalidate();
         }
 
