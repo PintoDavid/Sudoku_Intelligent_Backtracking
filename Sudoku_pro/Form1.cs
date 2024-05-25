@@ -240,6 +240,11 @@ namespace Sudoku_pro
                 BtnSolucionSudoku.Enabled = false;
                 BtnSolucionSudoku.BackColor = Color.LightGray;
                 LbTiempoTranscurrido.Text = "0.00 ms";
+                // Ocultar los controles de movimientos y ajustar el tamaño del formulario
+                labelMovimientos.Visible = false;
+                textBoxMovimientos.Visible = false;
+                this.Width -= aumentoAncho; // Reducir el ancho del formulario
+                CenterToScreen();
             }
         }
 
