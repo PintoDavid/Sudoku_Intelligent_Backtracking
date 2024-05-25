@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace Sudoku_pro
 {
@@ -33,7 +31,13 @@ namespace Sudoku_pro
         int fila, columna;
         private double porcentajeEliminar;
         private int celdasEliminar;
+        private bool sudokuGenerado;
+        public bool sudokuAnswered;
+        private TimeSpan tiempoTranscurrido;
+        private bool movimientosVisibles = false;
+        private const int aumentoAncho = 357;
 
+        Stopwatch stopwatch;
         SudokuSolverSubmatriz solver;
 
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -43,23 +47,9 @@ namespace Sudoku_pro
         {
             InitializeComponent();
 
-            // Inicialmente, solo habilitar Tiposudoku
-            Tiposudoku.Enabled = true;
-            Tamaño.Enabled = false;
-            Cantidad_celdas_vacias.Enabled = false;
-            BtnGenerarSudoku.Enabled = false;
-            BtnSolucionSudoku.Enabled = false;
-
-            Tamaño.BackColor = Color.LightGray;
-            Cantidad_celdas_vacias.BackColor = Color.LightGray;
-            BtnGenerarSudoku.BackColor = Color.LightGray;
-            BtnSolucionSudoku.BackColor = Color.LightGray;
-
-            BtnGenerarSudoku.FlatStyle = FlatStyle.Flat;
-            BtnGenerarSudoku.FlatAppearance.BorderSize = 0;
-
-            BtnSolucionSudoku.FlatStyle = FlatStyle.Flat;
-            BtnSolucionSudoku.FlatAppearance.BorderSize = 0;
+            // Establecer el tamaño inicial de la ventana
+            this.Width = 689;
+            this.Height = 564;
 
             Tiposudoku.SelectedIndexChanged += Tiposudoku_SelectedIndexChanged;
             Tamaño.SelectedIndexChanged += Tamaño_SelectedIndexChanged;
@@ -69,7 +59,7 @@ namespace Sudoku_pro
             // Asocia el evento Paint del panel Tablero
             Tablero.Paint += Tablero_Paint;
 
-            Tiposudoku.SelectedIndex = Tiposudoku.FindStringExact("Nada");
+            Tiposudoku.SelectedIndex = Tiposudoku.FindStringExact("Ninguno");
         }
 
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -89,13 +79,13 @@ namespace Sudoku_pro
                 {
                     Rinfo.Text = " Submatriz";
                 }
-                else if (tipoSudoku == "Nada")
+                else if (tipoSudoku == "Ninguno")
                 {
-                    Rinfo.Text = " Nada";
+                    Rinfo.Text = " Ninguno";
                 }
 
                 // Habilitar el ComboBox Tamaño
-                if (tipoSudoku != "Nada")
+                if (tipoSudoku != "Ninguno")
                 {
                     Tamaño.Enabled = true;
                     Tamaño.BackColor = Color.White;
@@ -134,6 +124,39 @@ namespace Sudoku_pro
             }
         }
 
+        private void Cantidad_celdas_vacias_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Cantidad_celdas_vacias.SelectedItem != null)
+            {
+                Rinfo3.Text = "Dificultad " + Cantidad_celdas_vacias.SelectedItem.ToString();
+
+                // Habilitar el botón BtnGenerarSudoku
+                BtnGenerarSudoku.Enabled = true;
+                BtnGenerarSudoku.BackColor = Color.Gold;
+            }
+        }
+
+        private void ReiniciarComboBoxes()
+        {
+            if (Tiposudoku.Items.Count > 0)
+            {
+                Tiposudoku.SelectedIndex = 0;
+                Rinfo.Text = Tiposudoku.SelectedItem.ToString();
+            }
+
+            if (Tamaño.Items.Count > 0)
+            {
+                Tamaño.SelectedIndex = -1;
+                Rinfo2.Text = "-";
+            }
+
+            if (Cantidad_celdas_vacias.Items.Count > 0)
+            {
+                Cantidad_celdas_vacias.SelectedIndex = -1;
+                Rinfo3.Text = "-";
+            }
+        }
+
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         BOTONES DE GENERACIÓN U SOLUCIONADOR INTELIGENTE
         77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777*/
@@ -141,25 +164,113 @@ namespace Sudoku_pro
         {
             GenerarSudoku();
             DibujarTablero();
+            sudokuGenerado = true;
+            
+            Tiposudoku.Enabled = false;
+            Tamaño.Enabled = false;
+            Cantidad_celdas_vacias.Enabled = false;
+            
             BtnSolucionSudoku.Enabled = true;
             BtnSolucionSudoku.BackColor = Color.LightCoral;
+            BtnReiniciarSudoku.Enabled = true;
+            BtnReiniciarSudoku.BackColor = Color.YellowGreen;
+            BtnGenerarSudoku.Enabled = false;
+            BtnGenerarSudoku.BackColor = Color.LightGray;
+
+            MessageBox.Show("El Sudoku ha sido generado correctamente. Ya puedes probar la inteligencia para resolverlo.", "Sudoku generado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
         private void BtnSolucionSudoku_Click_1(object sender, EventArgs e)
         {
             solver = new SudokuSolverSubmatriz(tablero, gridSize, subMatrixSize);
-            if (solver.ResolverSudoku())
+            solver.MovimientoRealizado += Solver_MovimientoRealizado;
+            stopwatch = new Stopwatch();
+            if (sudokuAnswered != true)
             {
-                tablero = solver.ObtenerSolucion();
-                DibujarTablero();
+                stopwatch.Start();
+
+                if (solver.ResolverSudoku())
+                {
+                    tablero = solver.ObtenerSolucion();
+                    DibujarTablero();
+                    BtnMovimientosSudoku.Enabled = true;
+                    BtnMovimientosSudoku.BackColor = Color.White;
+
+                    // Detener el temporizador
+                    stopwatch.Stop();
+
+                    // Obtener el tiempo transcurrido
+                    tiempoTranscurrido = stopwatch.Elapsed;
+                    LbTiempoTranscurrido.Text = $"{tiempoTranscurrido.TotalMilliseconds} ms";
+
+                    MessageBox.Show("El Sudoku ha sido resuelto.","Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    sudokuAnswered = true;
+                }
+                else
+                {
+                    MessageBox.Show("No se puede resolver el Sudoku.", "Error - Sudoku no resuelto", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             else
             {
-                MessageBox.Show("No se puede resolver el Sudoku.");
+                MessageBox.Show("El Sudoku ya está resuelto.", "Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
+        private void BtnReiniciarSudoku_Click(object sender, EventArgs e)
+        {
+            // Mostrar el MessageBox y obtener el resultado
+            DialogResult result = MessageBox.Show(
+                "¿Está seguro que quiere reiniciar la configuración del Sudoku? ¡Perderá el Sudoku actual generado!",
+                "Confirmar Reinicio",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            // Evaluar el resultado del MessageBox
+            if (result == DialogResult.Yes && sudokuGenerado == true)
+            {
+                // Código para limpiar el tablero de Sudoku
+                LimpiarTablero();
+                sudokuGenerado = false;
+                Tiposudoku.Enabled = true;
+                BtnReiniciarSudoku.Enabled = false;
+                BtnReiniciarSudoku.BackColor = Color.LightGray;
+                BtnMovimientosSudoku.Enabled = false;
+                BtnMovimientosSudoku.BackColor = Color.LightGray;
+                BtnSolucionSudoku.Enabled = false;
+                BtnSolucionSudoku.BackColor = Color.LightGray;
+                LbTiempoTranscurrido.Text = "0.00 ms";
+            }
+        }
+
+        private void BtnMovimientosSudoku_Click(object sender, EventArgs e)
+        {
+            movimientosVisibles = !movimientosVisibles;
+            if (movimientosVisibles)
+            {
+                // Mostrar los controles de movimientos y ajustar el tamaño del formulario
+                labelMovimientos.Visible = true;
+                textBoxMovimientos.Visible = true;
+                this.Width += aumentoAncho; // Aumentar el ancho del formulario
+            }
+            else
+            {
+                // Ocultar los controles de movimientos y ajustar el tamaño del formulario
+                labelMovimientos.Visible = false;
+                textBoxMovimientos.Visible = false;
+                this.Width -= aumentoAncho; // Reducir el ancho del formulario
+            }
+            CenterToScreen();
+        }
+
+        private void Solver_MovimientoRealizado(object sender, string e)
+        {
+            // Mostrar el movimiento en el TextBox
+            textBoxMovimientos.AppendText(e + Environment.NewLine);
+        }
+
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
-        GENERACION DE SUDOKUS - DIBUJO DE TABLERO
+        GENERACION DE SUDOKUS - DIBUJO DE TABLERO - LIMPIEZA DE TABLERO
         77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777*/
         private void GenerarSudoku()
         {
@@ -213,6 +324,27 @@ namespace Sudoku_pro
             {
                 DibujarGrillaSubmatriz(e.Graphics, cellSize);
             }
+        }
+
+        private void LimpiarTablero()
+        {
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    tablero[i, j] = 0; // Asumiendo que 0 representa una celda vacía
+                }
+            }
+
+            // Reiniciar otras variables relacionadas con las grillas
+            gridSize = 0;
+            subMatrixSize = 0;
+
+            // Redibujar el tablero
+            Tablero.Invalidate();
+
+            // Reiniciar ComboBoxes a sus valores por defecto
+            ReiniciarComboBoxes();
         }
 
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -318,7 +450,7 @@ namespace Sudoku_pro
             }
             else
             {
-                Console.WriteLine("No se pudo generar un Sudoku válido.");
+                MessageBox.Show("No se pudo generar un Sudoku válido.");
             }
         }
 
@@ -391,18 +523,6 @@ namespace Sudoku_pro
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         CONTROL DE CELDAS VACÍAS
         77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777*/
-        private void Cantidad_celdas_vacias_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (Cantidad_celdas_vacias.SelectedItem != null)
-            {
-                Rinfo3.Text = "Dificultad " + Cantidad_celdas_vacias.SelectedItem.ToString();
-
-                // Habilitar el botón BtnGenerarSudoku
-                BtnGenerarSudoku.Enabled = true;
-                BtnGenerarSudoku.BackColor = Color.Gold;
-            }
-        }
-
         private void EliminarCeldasSegunDificultad(string dificultad)
         {
             switch (dificultad)
@@ -446,6 +566,12 @@ namespace Sudoku_pro
         private int subMatrixSize;
         private int startRow;
         private int startCol;
+        public event EventHandler<string> MovimientoRealizado;
+
+        private void NotificarMovimiento(string mensaje)
+        {
+            MovimientoRealizado?.Invoke(this, mensaje);
+        }
 
         public SudokuSolverSubmatriz(int[,] tablero, int gridSize, int subMatrixSize)
         {
@@ -473,6 +599,7 @@ namespace Sudoku_pro
                 if (EsValido(row, col, num))
                 {
                     tablero[row, col] = num;
+                    NotificarMovimiento($"Se colocó {num} en la celda ({row},{col})");
                     if (Resolver(row, col + 1))
                         return true;
                     tablero[row, col] = 0;
@@ -487,7 +614,10 @@ namespace Sudoku_pro
             for (int x = 0; x < gridSize; x++)
             {
                 if (tablero[row, x] == num || tablero[x, col] == num)
+                {
+                    NotificarMovimiento($"El número {num} no es válido en la fila o columna ({row},{col})");
                     return false;
+                }
             }
 
             startRow = row - row % subMatrixSize;
@@ -497,10 +627,14 @@ namespace Sudoku_pro
                 for (int j = 0; j < subMatrixSize; j++)
                 {
                     if (tablero[i + startRow, j + startCol] == num)
+                    {
+                        NotificarMovimiento($"El número {num} no es válido en la submatriz ({row},{col})");
                         return false;
+                    }
                 }
             }
 
+            NotificarMovimiento($"El número {num} es válido en la celda ({row},{col})");
             return true;
         }
 
