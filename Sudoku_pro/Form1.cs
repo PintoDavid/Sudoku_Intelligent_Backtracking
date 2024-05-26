@@ -16,7 +16,6 @@ namespace Sudoku_pro
         public int subMatrixSize;
         public int[,] tablero;
         private int[,] solucion;
-        private int[,] tableroInicial;
         private int[,] primeraSubmatrizRecortada;
         private int newSize;
         private int panelSize;
@@ -206,8 +205,6 @@ namespace Sudoku_pro
                 {
                     stopwatch.Start();
 
-                    tableroInicial = (int[,])tablero.Clone();
-
                     tablero = solver.ObtenerSolucion();
 
                     stopwatch.Stop();
@@ -249,10 +246,10 @@ namespace Sudoku_pro
 
             if (result == DialogResult.Yes && sudokuGenerado == true)
             {
+                LimpiarTablero();
+
                 sudokuGenerado = false;
                 sudokuAnswered = false;
-
-                LimpiarTablero();
 
                 Tiposudoku.Enabled = true;
 
@@ -313,38 +310,6 @@ namespace Sudoku_pro
             else if (tipoSudoku == "Submatriz")
             {
                 DibujarGrillaSubmatriz(e.Graphics, cellSize);
-            }
-        }
-
-        private void DibujarTablero(Graphics g, int[,] board)
-        {
-            panelSize = Tablero.Width;
-            cellSize = panelSize / gridSize;
-
-            for (int i = 0; i < gridSize; i++)
-            {
-                for (int j = 0; j < gridSize; j++)
-                {
-                    Brush brush;
-                    Rectangle rect = new Rectangle(j * cellSize, i * cellSize, cellSize, cellSize);
-
-                    if (board[i, j] != 0)
-                    {
-                        brush = Brushes.Black;
-                        numeroStr = board[i, j].ToString();
-                        textSize = g.MeasureString(numeroStr, Font);
-                        textX = rect.X + (cellSize - textSize.Width) / 2;
-                        textY = rect.Y + (cellSize - textSize.Height) / 2;
-                        g.DrawString(numeroStr, Font, brush, textX, textY);
-                    }
-                    else
-                    {
-                        brush = Brushes.White;
-                    }
-
-                    g.FillRectangle(brush, rect);
-                    g.DrawRectangle(Pens.Black, rect);
-                }
             }
         }
 
