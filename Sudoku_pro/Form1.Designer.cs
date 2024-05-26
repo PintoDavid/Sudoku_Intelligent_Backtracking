@@ -35,7 +35,6 @@ namespace Sudoku_pro
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.BtnSolucionSudoku = new System.Windows.Forms.Button();
-            this.BtnMovimientosSudoku = new System.Windows.Forms.Button();
             this.Tiposudoku = new System.Windows.Forms.ComboBox();
             this.Tamaño = new System.Windows.Forms.ComboBox();
             this.Cantidad_celdas_vacias = new System.Windows.Forms.ComboBox();
@@ -47,9 +46,6 @@ namespace Sudoku_pro
             this.label11 = new System.Windows.Forms.Label();
             this.Rinfo = new System.Windows.Forms.Label();
             this.BtnGenerarSudoku = new System.Windows.Forms.Button();
-            this.textBoxMovimientos = new System.Windows.Forms.TextBox();
-            this.labelMovimientos = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.LbEstadoPrograma = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -117,21 +113,6 @@ namespace Sudoku_pro
             this.BtnSolucionSudoku.Text = "Solución con IA";
             this.BtnSolucionSudoku.UseVisualStyleBackColor = false;
             this.BtnSolucionSudoku.Click += new System.EventHandler(this.BtnSolucionSudoku_Click_1);
-            // 
-            // BtnMovimientosSudoku
-            // 
-            this.BtnMovimientosSudoku.BackColor = System.Drawing.Color.LightGray;
-            this.BtnMovimientosSudoku.Enabled = false;
-            this.BtnMovimientosSudoku.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnMovimientosSudoku.Font = new System.Drawing.Font("Tahoma", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnMovimientosSudoku.Location = new System.Drawing.Point(480, 311);
-            this.BtnMovimientosSudoku.Margin = new System.Windows.Forms.Padding(2);
-            this.BtnMovimientosSudoku.Name = "BtnMovimientosSudoku";
-            this.BtnMovimientosSudoku.Size = new System.Drawing.Size(137, 45);
-            this.BtnMovimientosSudoku.TabIndex = 10;
-            this.BtnMovimientosSudoku.Text = "Pasos de la inteligencia";
-            this.BtnMovimientosSudoku.UseVisualStyleBackColor = false;
-            this.BtnMovimientosSudoku.Click += new System.EventHandler(this.BtnMovimientosSudoku_Click);
             // 
             // Tiposudoku
             // 
@@ -270,41 +251,6 @@ namespace Sudoku_pro
             this.BtnGenerarSudoku.Text = "Generar Sudoku";
             this.BtnGenerarSudoku.UseVisualStyleBackColor = false;
             // 
-            // textBoxMovimientos
-            // 
-            this.textBoxMovimientos.Location = new System.Drawing.Point(686, 51);
-            this.textBoxMovimientos.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxMovimientos.Multiline = true;
-            this.textBoxMovimientos.Name = "textBoxMovimientos";
-            this.textBoxMovimientos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxMovimientos.Size = new System.Drawing.Size(333, 404);
-            this.textBoxMovimientos.TabIndex = 23;
-            this.textBoxMovimientos.Visible = false;
-            // 
-            // labelMovimientos
-            // 
-            this.labelMovimientos.AutoSize = true;
-            this.labelMovimientos.Font = new System.Drawing.Font("Tahoma", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelMovimientos.ForeColor = System.Drawing.Color.DarkCyan;
-            this.labelMovimientos.Location = new System.Drawing.Point(754, 19);
-            this.labelMovimientos.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelMovimientos.Name = "labelMovimientos";
-            this.labelMovimientos.Size = new System.Drawing.Size(189, 18);
-            this.labelMovimientos.TabIndex = 24;
-            this.labelMovimientos.Text = "Movimientos Realizados";
-            this.labelMovimientos.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(738, 458);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(234, 40);
-            this.label1.TabIndex = 25;
-            this.label1.Text = "Se demora un poco más\r\npor la impresión de movimientos";
-            // 
             // LbEstadoPrograma
             // 
             this.LbEstadoPrograma.AutoSize = true;
@@ -323,9 +269,6 @@ namespace Sudoku_pro
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(673, 525);
             this.Controls.Add(this.LbEstadoPrograma);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.labelMovimientos);
-            this.Controls.Add(this.textBoxMovimientos);
             this.Controls.Add(this.BtnGenerarSudoku);
             this.Controls.Add(this.Rinfo);
             this.Controls.Add(this.label11);
@@ -337,7 +280,6 @@ namespace Sudoku_pro
             this.Controls.Add(this.Cantidad_celdas_vacias);
             this.Controls.Add(this.Tamaño);
             this.Controls.Add(this.Tiposudoku);
-            this.Controls.Add(this.BtnMovimientosSudoku);
             this.Controls.Add(this.BtnSolucionSudoku);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -361,7 +303,6 @@ namespace Sudoku_pro
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button BtnSolucionSudoku;
-        private System.Windows.Forms.Button BtnMovimientosSudoku;
         private System.Windows.Forms.ComboBox Tiposudoku;
         private System.Windows.Forms.ComboBox Tamaño;
         private System.Windows.Forms.ComboBox Cantidad_celdas_vacias;
@@ -373,9 +314,6 @@ namespace Sudoku_pro
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label Rinfo;
         private System.Windows.Forms.Button BtnGenerarSudoku;
-        private System.Windows.Forms.TextBox textBoxMovimientos;
-        private System.Windows.Forms.Label labelMovimientos;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label LbEstadoPrograma;
     }
 }

@@ -16,6 +16,7 @@ namespace Sudoku_pro
         public int subMatrixSize;
         public int[,] tablero;
         private int[,] solucion;
+        private int[,] tableroInicial;
         private int[,] primeraSubmatrizRecortada;
         private int newSize;
         private int panelSize;
@@ -34,9 +35,8 @@ namespace Sudoku_pro
         private int celdasEliminar;
         private bool sudokuGenerado = false;
         public bool sudokuAnswered = false;
-        private bool movimientosVisibles = false;
-        private const int aumentoAncho = 357;
         private double pesoVariable = 1;
+        private bool solucionEncontrada;
 
         Stopwatch stopwatch;
         SudokuSolver solver;
@@ -48,12 +48,10 @@ namespace Sudoku_pro
         {
             InitializeComponent();
 
-            this.Width = 689;
-            this.Height = 564;
-
             Tiposudoku.SelectedIndexChanged += Tiposudoku_SelectedIndexChanged;
             Tamaño.SelectedIndexChanged += Tamaño_SelectedIndexChanged;
             Cantidad_celdas_vacias.SelectedIndexChanged += Cantidad_celdas_vacias_SelectedIndexChanged;
+
             BtnGenerarSudoku.Click += BtnGenerarSudoku_Click;
 
             Tablero.Paint += Tablero_Paint;
@@ -182,21 +180,33 @@ namespace Sudoku_pro
             MessageBox.Show("El Sudoku ha sido generado correctamente. Ya puedes probar la inteligencia para resolverlo.", "Sudoku generado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void BtnSolucionSudoku_Click_1(object sender, EventArgs e)
+        private async void BtnSolucionSudoku_Click_1(object sender, EventArgs e)
         {
             solver = new SudokuSolver(tablero);
             stopwatch = new Stopwatch();
 
+            BtnReiniciarSudoku.Enabled = false;
+            BtnReiniciarSudoku.BackColor = Color.Red;
+
             if (sudokuAnswered == false)
             {
-                BtnMovimientosSudoku.Enabled = true;
-                BtnMovimientosSudoku.BackColor = Color.White;
+                BtnSolucionSudoku.Enabled = false;
+                BtnSolucionSudoku.BackColor = Color.Red;
 
                 LbEstadoPrograma.Text = "Por favor, espere. Buscando solución.";
 
-                if (solver.ResolverSudoku())
+                solucionEncontrada = false;
+
+                await Task.Run(() =>
+                {
+                    solucionEncontrada = solver.ResolverSudoku();
+                });
+
+                if (solucionEncontrada)
                 {
                     stopwatch.Start();
+
+                    tableroInicial = (int[,])tablero.Clone();
 
                     tablero = solver.ObtenerSolucion();
 
@@ -208,8 +218,13 @@ namespace Sudoku_pro
 
                     LbEstadoPrograma.Text = "El Sudoku está resuelto.";
 
-                    MessageBox.Show("El Sudoku ha sido resuelto.","Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("El Sudoku ha sido resuelto.", "Sudoku resuelto", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     sudokuAnswered = true;
+
+                    BtnSolucionSudoku.Enabled = true;
+                    BtnSolucionSudoku.BackColor = Color.LightCoral;
+                    BtnReiniciarSudoku.Enabled = true;
+                    BtnReiniciarSudoku.BackColor = Color.YellowGreen;
                 }
                 else
                 {
@@ -243,48 +258,14 @@ namespace Sudoku_pro
 
                 BtnReiniciarSudoku.Enabled = false;
                 BtnReiniciarSudoku.BackColor = Color.LightGray;
-                BtnMovimientosSudoku.Enabled = false;
-                BtnMovimientosSudoku.BackColor = Color.LightGray;
                 BtnSolucionSudoku.Enabled = false;
                 BtnSolucionSudoku.BackColor = Color.LightGray;
 
                 LbTiempoTranscurrido.Text = "0.00 ms";
                 LbEstadoPrograma.Text = "Sudoku no generado. Configura su Sudoku";
-
-                labelMovimientos.Visible = false;
-                textBoxMovimientos.Visible = false;
-                movimientosVisibles = false;
-
-                if (this.Width != 689)
-                {
-                    this.Width -= aumentoAncho;
-                }
                 this.Width = 689;
                 CenterToScreen();
             }
-        }
-
-        private void BtnMovimientosSudoku_Click(object sender, EventArgs e)
-        {
-            movimientosVisibles = !movimientosVisibles;
-            if (movimientosVisibles)
-            {
-                labelMovimientos.Visible = true;
-                textBoxMovimientos.Visible = true;
-                this.Width += aumentoAncho;
-            }
-            else
-            {
-                labelMovimientos.Visible = false;
-                textBoxMovimientos.Visible = false;
-                this.Width -= aumentoAncho;
-            }
-            CenterToScreen();
-        }
-
-        private void Solver_MovimientoRealizado(object sender, string e)
-        {
-            textBoxMovimientos.AppendText(e + Environment.NewLine);
         }
 
         /*77777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -332,6 +313,38 @@ namespace Sudoku_pro
             else if (tipoSudoku == "Submatriz")
             {
                 DibujarGrillaSubmatriz(e.Graphics, cellSize);
+            }
+        }
+
+        private void DibujarTablero(Graphics g, int[,] board)
+        {
+            panelSize = Tablero.Width;
+            cellSize = panelSize / gridSize;
+
+            for (int i = 0; i < gridSize; i++)
+            {
+                for (int j = 0; j < gridSize; j++)
+                {
+                    Brush brush;
+                    Rectangle rect = new Rectangle(j * cellSize, i * cellSize, cellSize, cellSize);
+
+                    if (board[i, j] != 0)
+                    {
+                        brush = Brushes.Black;
+                        numeroStr = board[i, j].ToString();
+                        textSize = g.MeasureString(numeroStr, Font);
+                        textX = rect.X + (cellSize - textSize.Width) / 2;
+                        textY = rect.Y + (cellSize - textSize.Height) / 2;
+                        g.DrawString(numeroStr, Font, brush, textX, textY);
+                    }
+                    else
+                    {
+                        brush = Brushes.White;
+                    }
+
+                    g.FillRectangle(brush, rect);
+                    g.DrawRectangle(Pens.Black, rect);
+                }
             }
         }
 
